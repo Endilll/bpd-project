@@ -26,5 +26,4 @@ private:
     string role_;
 
     static string generateSalt_();
-    static string hashSha512(const string string);
 };
