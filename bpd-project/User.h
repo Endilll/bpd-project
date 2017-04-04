@@ -11,7 +11,7 @@ public:
          const string role = "user");
 
     string getLogin() const;
-    void   setLogin(const string login);
+    //void   setLogin(const string login);
 
     string getRole() const;
     void   setRole(const string role);

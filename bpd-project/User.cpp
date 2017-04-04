@@ -22,7 +22,7 @@ User::User(const string login,
 }
 
 string User::getLogin() const             { return login_;  }
-void   User::setLogin(const string login) { login_ = login; }
+//void   User::setLogin(const string login) { login_ = login; }
 
 string User::getRole() const            { return role_; }
 void   User::setRole(const string role) { role_ = role; }
