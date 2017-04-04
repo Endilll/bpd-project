@@ -36,10 +36,10 @@ vector<string> Users::listUsers()
 
 User& Users::getUser(const string login)
 {
-    auto iterator = users_.find(login);
-    if (iterator != users_.end())
-        return iterator->second;
-    else
+    try {
+        return users_.at(login);
+    } catch (exception exception) {
         throw string("User doesn't exists");
+    }
 }
 
