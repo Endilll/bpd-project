@@ -6,25 +6,25 @@ using namespace std;
 
 class Subscriber {
 public:
-	Subscriber(string          fullName,
-			   long long       number,
+	Subscriber(const string    fullName,
+			   const long long number,
 			   const long long year,
-			   string          plan     );
+			   const string    plan);
 
-	string getFullName();
-	void   setFullName(string fullName);
+	string    getFullName() const;
+	//void     setFullName(string fullName);
 
-	long long getNumber();
+	long long getNumber() const;
 	void	  setNumber(long long number);
 
-	const long long getYear();
+	long long getYear() const;
 
-	string getPlan();
-	void   setPlan(string plan);
+	string    getPlan() const;
+	void      setPlan(string plan);
 
 private:
-	string          fullName_;
-	long long       number_;
+	const string    fullName_;
+	      long long number_;
 	const long long year_;
-	string          plan_;
+	      string    plan_;
 };
