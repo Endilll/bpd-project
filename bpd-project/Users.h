@@ -9,10 +9,12 @@ using namespace std;
 
 static class Users {
 public:
-    void add(const string login, const string password, const string role = "user");
+    void add(const string login,
+             const string password,
+             const string role = "user");
     void remove(const string login);
-    vector<string> listUsers();
     User& getUser(const string login);
+    vector<pair<string, string>> listUsers();
 
 private:
     unordered_map<string, User> users_;

@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 #include "stdafx.h"
 
 #include <vector>
@@ -22,16 +25,6 @@ void Users::remove(const string login)
     } catch (exception exception) {
         throw string("Failed to remove user");
     }
-    
-}
-
-vector<string> Users::listUsers()
-{
-    vector<string> logins;
-    logins.reserve(users_.size());
-    for (auto pair : users_)
-        logins.push_back(pair.first);
-    return logins;
 }
 
 User& Users::getUser(const string login)
@@ -43,3 +36,11 @@ User& Users::getUser(const string login)
     }
 }
 
+vector<pair<string, string>> Users::listUsers()
+{
+    vector<pair<string, string>> users;
+    users.reserve(users_.size());
+    for (auto pair : users_)
+        users.emplace_back(pair.second.getLogin(), pair.second.getRole());
+    return users;
+}
