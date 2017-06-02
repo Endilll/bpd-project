@@ -19,8 +19,8 @@ int main()
     SetConsoleOutputCP(65001);
     try {
         users.add("admin", "admin");
-        users.getUser("admin").setRole("admin");
-        users.getUser("user");
+        users.get("admin").setRole("admin");
+        users.get("user");
     } catch (string errorMessage) {
         cout << errorMessage << endl;
     }
@@ -36,8 +36,8 @@ int main()
         cin >> login;
         cout << endl;
         try {
-            users.getUser(login);
         } catch (string errorMessage) {
+            users.get(login);
             cout << errorMessage << endl;
             continue;
         }
@@ -47,7 +47,7 @@ int main()
         cin >> password;
         SetStdinEcho();
         cout << endl;
-        if (users.getUser(login).isPasswordCorrect(password) == false) {
+        if (users.get(login).isPasswordCorrect(password) == false) {
             cout << "Неверный пароль" << endl;
             Sleep(1);
             continue;
@@ -55,7 +55,7 @@ int main()
         system("cls");
         break;
     } while (true);
-    User &currentUser = users.getUser(login);
+    User &currentUser = users.get(login);
 
 	return 0;
 }
