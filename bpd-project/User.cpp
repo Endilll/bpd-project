@@ -29,6 +29,7 @@ void   User::setRole(const string &role) { role_ = role; }
 void User::setPassword(const string &password)
 {
     SHA3 Sha3(SHA3::Bits512);
+    passwordSalt_ = generateSalt_();
     password_ = Sha3(password + "+" + passwordSalt_);
 }
 
