@@ -43,10 +43,10 @@ vector<array<string, 4>> Subscribers::listSubscribers()
     vector<array<string, 4>> subscribers;
     subscribers.reserve(subscribers_.size());
     for (auto pair : subscribers_)
-        subscribers.emplace_back(          pair.second.getFullName(),
-                                 to_string(pair.second.getNumber()),
-                                 to_string(pair.second.getYear()),
-                                           pair.second.getPlan());
+        subscribers.push_back(array<string, 4>{          pair.second.getFullName(),
+                                               to_string(pair.second.getNumber()),
+                                               to_string(pair.second.getYear()),
+                                                         pair.second.getPlan()});
     return subscribers;
 }
 
