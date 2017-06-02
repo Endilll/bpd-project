@@ -15,7 +15,7 @@ void Users::add(const string &login,
                 const string &role)
 {
     if (users_.emplace(login, User(login, password, role)).second == false)
-        throw string("User already exists");
+        throw string("Пользователь с таким именем уже существует");
 }
 
 void Users::remove(const string &login)
@@ -23,7 +23,7 @@ void Users::remove(const string &login)
     try {
         users_.erase(login);
     } catch (exception exception) {
-        throw string("Failed to remove user");
+        throw string("Не удалось удалить пользователя");
     }
 }
 
@@ -32,7 +32,7 @@ User& Users::getUser(const string &login)
     try {
         return users_.at(login);
     } catch (exception exception) {
-        throw string("User doesn't exists");
+        throw string("Пользователь не существует");
     }
 }
 
