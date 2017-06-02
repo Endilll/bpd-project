@@ -39,8 +39,8 @@ int main()
         cin >> login;
         cout << endl;
         try {
-        } catch (string errorMessage) {
             users.get(login);
+        } catch (string &errorMessage) {
             cout << errorMessage << endl;
             continue;
         }
