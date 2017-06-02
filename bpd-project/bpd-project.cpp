@@ -12,6 +12,17 @@
 
 using namespace std;
 
+void SetStdinEcho(bool enable = true) {
+    HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+    DWORD mode;
+    GetConsoleMode(hStdin, &mode);
+    if (enable)
+        mode |= ENABLE_ECHO_INPUT;
+    else
+        mode &= ENABLE_ECHO_INPUT;
+    SetConsoleMode(hStdin, mode);
+}
+
 int main()
 {
     try {
