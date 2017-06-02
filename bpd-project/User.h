@@ -12,7 +12,7 @@ public:
 
     string getLogin() const;
 
-    string getRole() const;
+    string getRole()  const;
     void   setRole(const string &role);
 
     void   setPassword      (const string &password);
