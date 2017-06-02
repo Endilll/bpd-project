@@ -26,7 +26,7 @@ void SetStdinEcho(bool enable = true) {
 
 int main()
 {
-    SetConsoleCP(65001);
+    SetConsoleOutputCP(65001);
     try {
         users.add("admin", "admin");
         users.getUser("admin").setRole("admin");
