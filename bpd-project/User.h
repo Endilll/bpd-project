@@ -20,10 +20,10 @@ public:
     bool   isPasswordCorrect(const string &password) const;
            
 private:
-    string login_;
-    string password_;
-    string passwordSalt_;
-    string role_;
+    const string login_;
+          string password_;
+          string passwordSalt_;
+          string role_;
 
     static string generateSalt_();
 };
