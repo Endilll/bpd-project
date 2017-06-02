@@ -8,8 +8,11 @@
 
 #include <iostream>
 #include <windows.h>
+
+#include "Commands.h"
 #include "Subscriber.h"
 #include "Users.h"
+#include "Utilities.h"
 
 using namespace std;
 
