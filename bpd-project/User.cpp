@@ -46,10 +46,9 @@ string User::generateSalt_()
 {
     UUID uuid;
     RPC_CSTR uuidText;
-    string uuidString;
     UuidCreate(&uuid);
     UuidToStringA(&uuid, &uuidText);
-    uuidString = reinterpret_cast<char *>(uuidText);
+    string uuidString = reinterpret_cast<char *>(uuidText);
     RpcStringFreeA(&uuidText);
     return uuidString;
 }
