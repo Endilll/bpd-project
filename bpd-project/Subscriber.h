@@ -23,7 +23,7 @@ public:
 	void      setPlan(string &plan);
 
 private:
-	const string    fullName_;
+	      string    fullName_;
 	      long long number_;
 	const long long year_;
 	      string    plan_;
