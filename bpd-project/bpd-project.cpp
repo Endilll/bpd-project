@@ -34,6 +34,39 @@ int main()
     } catch (string errorMessage) {
         cout << errorMessage << endl;
     }
+
+    string login;
+    string password;
+    do {
+        login.clear();
+        password.clear();
+        system("cls");
+
+        cout << "Имя пользователя: ";
+        cin >> login;
+        cout << endl;
+        try {
+            users.getUser(login);
+        } catch (string errorMessage) {
+            cout << errorMessage << endl;
+            continue;
+        }
+
+        cout << "Пароль: ";
+        SetStdinEcho(false);
+        cin >> password;
+        SetStdinEcho();
+        cout << endl;
+        if (users.getUser(login).isPasswordCorrect(password) == false) {
+            cout << "Неверный пароль" << endl;
+            Sleep(1);
+            continue;
+        }
+        system("cls");
+        break;
+    } while (true);
+    User &currentUser = users.getUser(login);
+
 	return 0;
 }
 
