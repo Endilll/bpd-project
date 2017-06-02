@@ -27,7 +27,7 @@ void Users::remove(const string &login)
     }
 }
 
-User& Users::getUser(const string &login)
+User& Users::get(const string &login)
 {
     try {
         return users_.at(login);

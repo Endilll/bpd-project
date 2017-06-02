@@ -13,7 +13,7 @@ public:
              const string &password,
              const string &role = "user");
     void remove(const string &login);
-    User& getUser(const string &login);
+    User& get(const string &login);
     vector<pair<string, string>> listUsers();
 
 private:
