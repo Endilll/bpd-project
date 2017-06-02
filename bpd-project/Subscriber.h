@@ -12,7 +12,6 @@ public:
 			   const string    &plan);
 
 	string    getFullName() const;
-	void      setFullName(string &fullName);
 
 	long long getNumber() const;
 	void	  setNumber(long long &number);

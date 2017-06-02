@@ -19,7 +19,6 @@ Subscriber::Subscriber(const string    &fullName,
 			           plan_    (plan) {}
 
 string   Subscriber::getFullName() const		  { return fullName_;     }
-void     Subscriber::setFullName(string &fullName) { fullName_ = fullName; }
 
 long long Subscriber::getNumber() const			  { return number_;   }
 void	  Subscriber::setNumber(long long &number) { number_ = number; }
