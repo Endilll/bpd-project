@@ -7,6 +7,7 @@
 #include "stdafx.h"
 
 #include <iostream>
+#include <windows.h>
 #include "Subscriber.h"
 #include "Users.h"
 
@@ -25,6 +26,7 @@ void SetStdinEcho(bool enable = true) {
 
 int main()
 {
+    SetConsoleCP(65001);
     try {
         users.add("admin", "admin");
         users.getUser("admin").setRole("admin");
