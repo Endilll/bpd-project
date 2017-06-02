@@ -18,9 +18,9 @@ Subscriber::Subscriber(const string    &fullName,
 			           year_    (year),
 			           plan_    (plan) {}
 
-string   Subscriber::getFullName() const		  { return fullName_;     }
+string   Subscriber::getFullName() const		   { return fullName_;     }
 
-long long Subscriber::getNumber() const			  { return number_;   }
+long long Subscriber::getNumber() const			   { return number_;   }
 void	  Subscriber::setNumber(long long &number) { number_ = number; }
 
 long long Subscriber::getYear() const { return year_; }
