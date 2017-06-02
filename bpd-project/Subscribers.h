@@ -10,12 +10,12 @@ using namespace std;
 
 static class Subscribers {
 public:
-    void add(const string    fullName,
-             const long long number,
-             const long long year,
-             const string    plan);
-    void remove(const string fullName);
-    Subscriber& getSubscriber(const string fullName);
+    void add(const string    &fullName,
+             const long long &number,
+             const long long &year,
+             const string    &plan);
+    void remove(const string &fullName);
+    Subscriber& getSubscriber(const string &fullName);
     vector<array<string, 4>> listSubscribers();
 
 private:

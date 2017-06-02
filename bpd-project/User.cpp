@@ -11,9 +11,9 @@
 
 using namespace std;
 
-User::User(const string login,
-           const string password,
-           const string role) :
+User::User(const string &login,
+           const string &password,
+           const string &role) :
            login_ (login),
            role_  (role)          
 {
@@ -21,19 +21,19 @@ User::User(const string login,
     setPassword(password);
 }
 
-string User::getLogin() const             { return login_;  }
-//void   User::setLogin(const string login) { login_ = login; }
+string User::getLogin() const              { return login_;  }
+void   User::setLogin(const string &login) { login_ = login; }
 
-string User::getRole() const            { return role_; }
-void   User::setRole(const string role) { role_ = role; }
+string User::getRole() const             { return role_; }
+void   User::setRole(const string &role) { role_ = role; }
 
-void User::setPassword(const string password)
+void User::setPassword(const string &password)
 {
     SHA3 Sha3(SHA3::Bits512);
     password_ = Sha3(password + "+" + passwordSalt_);
 }
 
-bool User::isPasswordCorrect(const string enteredPassword) const
+bool User::isPasswordCorrect(const string &enteredPassword) const
 {
     SHA3 Sha3(SHA3::Bits512);
     if (password_ == Sha3(enteredPassword + "+" + passwordSalt_))

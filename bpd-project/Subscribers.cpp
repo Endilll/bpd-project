@@ -11,29 +11,29 @@
 
 using namespace std;
 
-void Subscribers::add(const string    fullName,
-                      const long long number,
-                      const long long year,
-                      const string    plan)
+void Subscribers::add(const string    &fullName,
+                      const long long &number,
+                      const long long &year,
+                      const string    &plan)
 {
     if (subscribers_.emplace(fullName, Subscriber(fullName, number, year, plan)).second == false)
         throw string("Subscriber already exists");
 }
 
-void Subscribers::remove(const string fullName)
+void Subscribers::remove(const string &fullName)
 {
     try {
         subscribers_.erase(fullName);
-    } catch (exception exception) {
+    } catch (exception &exception) {
         throw string("Failed to remove subscriber");
     }
 }
 
-Subscriber& Subscribers::getSubscriber(const string fullName)
+Subscriber& Subscribers::getSubscriber(const string &fullName)
 {
     try {
         return subscribers_.at(fullName);
-    } catch (exception exception) {
+    } catch (exception &exception) {
         throw string("Subscriber doesn't exists");
     }
 }

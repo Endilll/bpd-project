@@ -10,15 +10,15 @@
 
 using namespace std;
 
-void Users::add(const string login,
-                const string password,
-                const string role)
+void Users::add(const string &login,
+                const string &password,
+                const string &role)
 {
     if (users_.emplace(login, User(login, password, role)).second == false)
         throw string("User already exists");
 }
 
-void Users::remove(const string login)
+void Users::remove(const string &login)
 {
     try {
         users_.erase(login);
@@ -27,7 +27,7 @@ void Users::remove(const string login)
     }
 }
 
-User& Users::getUser(const string login)
+User& Users::getUser(const string &login)
 {
     try {
         return users_.at(login);

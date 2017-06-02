@@ -9,11 +9,11 @@ using namespace std;
 
 static class Users {
 public:
-    void add(const string login,
-             const string password,
-             const string role = "user");
-    void remove(const string login);
-    User& getUser(const string login);
+    void add(const string &login,
+             const string &password,
+             const string &role = "user");
+    void remove(const string &login);
+    User& getUser(const string &login);
     vector<pair<string, string>> listUsers();
 
 private:

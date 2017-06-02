@@ -6,18 +6,18 @@ using namespace std;
 
 class User {
 public:
-    User(const string login,
-         const string password,
-         const string role = "user");
+    User(const string &login,
+         const string &password,
+         const string &role = "user");
 
     string getLogin() const;
-    //void   setLogin(const string login);
+    void   setLogin(const string &login);
 
     string getRole() const;
-    void   setRole(const string role);
+    void   setRole(const string &role);
 
-    void   setPassword      (const string password);
-    bool   isPasswordCorrect(const string password) const;
+    void   setPassword      (const string &password);
+    bool   isPasswordCorrect(const string &password) const;
            
 private:
     const string login_;
