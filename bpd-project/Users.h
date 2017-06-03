@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <unordered_map>
+#include <map>
 
 #include "User.h"
 
@@ -17,5 +17,5 @@ public:
     vector<pair<string, string>> listUsers();
 
 private:
-    unordered_map<string, User> users_;
+    map<string, User> users_;
 } users;
