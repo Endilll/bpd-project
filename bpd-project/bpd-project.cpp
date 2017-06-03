@@ -17,17 +17,7 @@
 using namespace std;
 
 
-int main()
-{
-    SetConsoleOutputCP(65001);
-    try {
-        users.add("admin", "admin");
-        users.get("admin").setRole("admin");
-        users.get("user");
-    } catch (string errorMessage) {
-        cout << errorMessage << endl;
-    }
-
+User& login() {
     string login;
     do {
         system("cls");
@@ -57,8 +47,21 @@ int main()
         system("cls");
         break;
     } while (true);
-    User &currentUser = users.get(login);
+    return users.get(login);
+}
 
+int main()
+{
+    SetConsoleOutputCP(65001);
+    try {
+        users.add("admin", "admin");
+        users.get("admin").setRole("admin");
+        users.get("user");
+    } catch (string &errorMessage) {
+        cout << errorMessage << endl;
+    }
+
+    User& currentUser = login();
 	return 0;
 }
 
