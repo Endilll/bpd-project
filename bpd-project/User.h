@@ -17,6 +17,8 @@ public:
 
     void   setPassword      (const string &password);
     bool   isPasswordCorrect(const string &password) const;
+
+    friend Users;
            
 private:
     const string login_;
