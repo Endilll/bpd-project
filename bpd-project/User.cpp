@@ -21,7 +21,17 @@ User::User(const string &login,
     setPassword(password);
 }
 
-string User::getLogin() const            { return login_;  }
+User::User(const string &login,
+           const string &password,
+           const string &passwordSalt,
+           const string &role) :
+           login_(login),
+           password_(password),
+           passwordSalt_(passwordSalt),
+           role_(role) {}
+           
+
+string User::getLogin() const            { return login_; }
 
 string User::getRole()  const            { return role_; }
 void   User::setRole(const string &role) { role_ = role; }

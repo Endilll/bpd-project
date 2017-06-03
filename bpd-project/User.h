@@ -27,4 +27,9 @@ private:
           string role_;
 
     static string generateSalt_();
+
+    User(const string &login,
+         const string &password,
+         const string &passwordSalt,
+         const string &role);
 };
