@@ -29,12 +29,10 @@ int main()
     }
 
     string login;
-    string password;
     do {
-        login.clear();
-        password.clear();
         system("cls");
 
+        login.clear();
         cout << "Имя пользователя: ";
         cin >> login;
         cout << endl;
@@ -45,6 +43,7 @@ int main()
             continue;
         }
 
+        string password;
         cout << "Пароль: ";
         SetStdinEcho(false);
         cin >> password;
