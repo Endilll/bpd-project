@@ -1,6 +1,6 @@
 #pragma once
 
-class Commands
+static class Commands
 {
 public:
     Commands();
@@ -10,5 +10,5 @@ public:
     void addUser();
     void editUser();
     void removeUser();
-};
+} commands;
 
