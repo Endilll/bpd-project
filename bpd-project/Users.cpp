@@ -11,12 +11,14 @@
 using namespace std;
 using namespace YAML;
 
+map<string, User> Users::users_;
+
 void Users::add(const string &login,
                 const string &password,
                 const string &role)
 {
     if (users_.emplace(login, User(login, password, role)).second == false)
-        throw string("РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ С‚Р°РєРёРј РёРјРµРЅРµРј СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚");
+        throw string("Пользователь с таким именем уже существует");
 }
 
 void Users::remove(const string &login)
@@ -24,7 +26,7 @@ void Users::remove(const string &login)
     try {
         users_.erase(login);
     } catch (exception &exception) {
-        throw string("РќРµ СѓРґР°Р»РѕСЃСЊ СѓРґР°Р»РёС‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ");
+        throw string("Не удалось удалить пользователя");
     }
 }
 
@@ -33,16 +35,17 @@ User & Users::get(const string &login)
     try {
         return users_.at(login);
     } catch (exception &exception) {
-        throw string("РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚");
+        throw string("Пользователь не существует");
     }
 }
 
-vector<pair<string, string>> Users::listUsers()
+vector<vector<string>> Users::listUsers()
 {
-    vector<pair<string, string>> users;
+    vector<vector<string>> users;
     users.reserve(users_.size());
     for (auto pair : users_)
-        users.emplace_back(pair.second.getLogin(), pair.second.getRole());
+        users.push_back({ pair.second.getLogin(),
+                          pair.second.getRole() });
     return users;
 }
 
@@ -65,7 +68,7 @@ void Users::loadFromFile(const string &path) {
 	try {
 		usersNode = LoadFile(path);
 	} catch (exception &exception) {
-		throw string("Р¤Р°Р№Р» РЅРµ РЅР°Р№РґРµРЅ");
+		throw string("Файл не найден");
 	}
 
     for (auto userNode : usersNode) {
