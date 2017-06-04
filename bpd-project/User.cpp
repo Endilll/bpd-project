@@ -3,9 +3,10 @@
 
 #include "stdafx.h"
 
-#include "sha3.h"
 #pragma comment(lib, "rpcrt4.lib")
 #include <windows.h>
+
+#include "sha3.h"
 
 #include "User.h"
 
@@ -19,17 +20,7 @@ User::User(const string &login,
 {
     passwordSalt_ = generateSalt_();
     setPassword(password);
-}
-
-User::User(const string &login,
-           const string &password,
-           const string &passwordSalt,
-           const string &role) :
-           login_(login),
-           password_(password),
-           passwordSalt_(passwordSalt),
-           role_(role) {}
-           
+}          
 
 string User::getLogin() const            { return login_; }
 
@@ -61,4 +52,17 @@ string User::generateSalt_()
     string uuidString = reinterpret_cast<char *>(uuidText);
     RpcStringFreeA(&uuidText);
     return uuidString;
+}
+
+User::User(const vector<string> &fields) :
+           login_       (fields[0]),
+           password_    (fields[1]),
+           passwordSalt_(fields[2]),
+           role_        (fields[3]) {}
+
+vector<string> User::getAsVector() {
+    return { login_,
+             password_,
+             passwordSalt_,
+             role_ };
 }

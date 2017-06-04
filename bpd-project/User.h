@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -18,7 +19,7 @@ public:
     void   setPassword      (const string &password);
     bool   isPasswordCorrect(const string &password) const;
 
-    friend Users;
+    friend class Users;
            
 private:
     const string login_;
@@ -28,8 +29,6 @@ private:
 
     static string generateSalt_();
 
-    User(const string &login,
-         const string &password,
-         const string &passwordSalt,
-         const string &role);
+    User(const vector<string> &fields);
+    vector<string> getAsVector();
 };
