@@ -16,15 +16,11 @@
 
 using namespace std;
 
-bool DATABASE_LOADED = false;
-
 User& login() {
     string login;
     do {
-        system("cls");
-
         login.clear();
-        cout << "РРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ: ";
+        cout << "Имя пользователя: ";
         cin >> login;
         try {
             users.get(login);
@@ -34,17 +30,16 @@ User& login() {
         }
 
         string password;
-        cout << "РџР°СЂРѕР»СЊ: ";
-        //SetStdinEcho(false);
+        cout << "Пароль: ";
+        SetStdinEcho(false);
         cin >> password;
-        //SetStdinEcho();
+        SetStdinEcho();
         
         if (users.get(login).isPasswordCorrect(password) == false) {
-            cout << "РќРµРІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ" << endl;
+            cout << "Неверный пароль" << endl;
             Sleep(1);
             continue;
         }
-        system("cls");
         break;
     } while (true);
     return users.get(login);
@@ -52,91 +47,65 @@ User& login() {
 
 int main()
 {
-    SetConsoleOutputCP(65001);
-    /*try {
-        users.add("admin", "admin");
-        users.get("admin").setRole("admin");
-        users.add("user", "user", "user");
-        users.add("root", "root", "admin");
-    } catch (string &errorMessage) {
-        cout << errorMessage << endl;
-    }*/
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
     users.loadFromFile("users.yaml");
 
     User& currentUser = login();
+    //User& currentUser = users.get("admin");
+    //subscribers.loadFromFile("subscribers.yaml");
 
-    long long command;
-    auto askForCommand = [&command, &currentUser] {
+    while (true) {
+        system("cls");
+        long long command = 0;
         if (currentUser.getRole() == "admin") {
             do {
-                system("cls");
-                cout << "РЈРїСЂР°РІР»РµРЅРёРµ СѓС‡РµС‚РЅС‹РјРё Р·Р°РїРёСЃСЏРјРё РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№:" << endl;
-                cout << "1. РџСЂРѕСЃРјРѕС‚СЂ СЃРїРёСЃРєР° СѓС‡РµС‚РЅС‹С… Р·Р°РїРёСЃРµР№" << endl;
-                cout << "2. Р”РѕР±Р°РІР»РµРЅРёРµ РЅРѕРІРѕР№ СѓС‡РµС‚РЅРѕР№ Р·Р°РїРёСЃРё" << endl;
-                cout << "3. Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ СѓС‡РµС‚РЅРѕР№ Р·Р°РїРёСЃРё" << endl;
-                cout << "4. РЈРґР°Р»РµРЅРёРµ СѓС‡РµС‚РЅРѕР№ Р·Р°РїРёСЃРё" << endl;
-				cout << endl;
-				cout << "Р Р°Р±РѕС‚Р° СЃ С„Р°Р№Р»РѕРј Р°Р±РѕРЅРµРЅС‚РѕРІ:" << endl;
-				cout << "5. Р—Р°РіСЂСѓР·РёС‚СЊ" << endl;
-				cout << "6. РЎРѕС…СЂР°РЅРёС‚СЊ" << endl;
-				cout << endl;
-				cout << "Р Р°Р±РѕС‚Р° СЃ Р°Р±РѕРЅРµРЅС‚Р°РјРё:" << endl;
-				cout << "7. РџСЂРѕСЃРјРѕС‚СЂ СЃРїРёСЃРєР° Р°Р±РѕРЅРµРЅС‚РѕРІ" << endl;
-				cout << "8. Р”РѕР±Р°РІР»РµРЅРёРµ Р°Р±РѕРЅРµРЅС‚Р°" << endl;
-				cout << "9. Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ Р°Р±РѕРЅРµРЅС‚Р°" << endl;
-				cout << "10. РЈРґР°Р»РµРЅРёРµ Р°Р±РѕРЅРµРЅС‚Р°" << endl;
-				cout << "11. РќР°Р№С‚Рё Р°Р±РѕРЅРµРЅС‚Р°" << endl;
-				cout << "12. РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕРµ Р·Р°РґР°РЅРёРµ" << endl;
-				cout << endl;
-				cout << "13. Р’С‹С…РѕРґ" << endl;
-				
+                cout << "Управление учетными записями пользователей:" << endl;
+                cout << "1. Просмотреть спискок учетных записей" << endl;
+                cout << "2. Добавленить новую учетную запись" << endl;
+                cout << "3. Редактировать учетную запись" << endl;
+                cout << "4. Удалить учетную запись" << endl;
+                cout << endl;
+                cout << "Работа с файлом абонентов:" << endl;
+                cout << "5. Загрузить файл абонентов" << endl;
+                cout << "6. Сохранить файл абонентов" << endl;
+                cout << endl;
+                cout << "Работа с абонентами:" << endl;
+                cout << "7. Просмотреть спискок абонентов" << endl;
+                cout << "8. Добавленить абонента" << endl;
+                cout << "9. Редактировать абонента" << endl;
+                cout << "10. Удаленить абонента" << endl;
+                cout << "11. Найти абонента" << endl;
+                cout << "12. Выполнить индивидуальное задание" << endl;
+                cout << endl;
+                cout << "13. Выход" << endl;
+
                 cin >> command;
-			} while (!(command >= 1 && command <= 13));
+            } while (!(command >= 1 && command <= 13));
+
+            if (command == 13)
+                break;
+
+        } else if (currentUser.getRole() == "user") {
+            do {
+                cout << "Работа с файлом абонентов:" << endl;
+                cout << "1. Загрузить файл абонентов" << endl;
+                cout << endl;
+                cout << "Работа с абонентами:" << endl;
+                cout << "2. Просмотреть спискок абонентов" << endl;
+                cout << "3. Найти абонента" << endl;
+                cout << "4. Выполнить индивидуальное задание" << endl;
+                cout << endl;
+                cout << "5. Выход" << endl;
+
+                cin >> command;
+            } while (!(command >= 1 && command <= 5));
+
+            if (command == 5)
+                break;
         }
-    };
-
-	do {
-		askForCommand();
-
-		switch (command) {
-		case 1:
-			commands.printUsers();
-			break;
-		case 2:
-			commands.addUser();
-			break;
-		case 3:
-			commands.editUser();
-			break;
-		case 4:
-			commands.removeUser();
-			break;	
-		case 5:
-			commands.loadSubscribers();
-			break;
-		case 6:
-			commands.saveSubscribers();
-			break;
-		case 7:
-			commands.printSubscribers();
-			break;
-		case 8:
-			commands.addSubscriber();
-			break;
-		case 9:
-			commands.editSubscriber();
-			break;
-		case 10:
-			commands.removeSubscriber();
-			break;
-		case 11:
-			commands.findSubscriber();
-			break;
-		case 12:
-			commands.doIndividual();
-			break;
-		}
-	} while (command != 13);
+        commands.invoke(currentUser.getRole(), command);
+    }
 	return 0;
 }
-
