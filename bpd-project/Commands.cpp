@@ -14,30 +14,45 @@
 
 using namespace std;
 
+map<string, vector<void(*)()>> Commands::commands_{
+    make_pair("admin", vector<void(*)()> { &Commands::printUsers,
+                                           &Commands::addUser,
+                                           &Commands::editUser,
+                                           &Commands::removeUser,
+                                           &Commands::loadSubscribers,
+                                           &Commands::saveSubscribers,
+                                           &Commands::printSubscribers,
+                                           &Commands::addSubscriber,
+                                           &Commands::editSubscriber,
+                                           &Commands::removeSubscriber,
+                                           &Commands::findSubscriber,
+                                           &Commands::doIndividual }),
 
-void Commands::printUsers() const {
+    make_pair("user", vector<void(*)()>  { &Commands::loadSubscribers,
+                                           &Commands::printSubscribers,
+                                           &Commands::findSubscriber,
+                                           &Commands::doIndividual })
+};
+
+void Commands::invoke(const string &role, const long long &command) {
+    commands_[role][command - 1]();
+}
+
+void Commands::printUsers() {
     system("cls");
-    cout << "РЎРїРёСЃРѕРє РІСЃРµС… РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№:" << endl;
+    cout << "Список всех пользователей:" << endl;
 
-    auto usersList = users.listUsers();
-
-    size_t loginMaxLength = 0;
-    for (auto pair : usersList)
-        if (pair.first.length() > loginMaxLength)
-            loginMaxLength = pair.first.length();
-
-    for (auto pair : usersList)
-        cout << left << setw(loginMaxLength) << pair.first << " " << pair.second << endl;
+    printVectorOfVectors(users.listUsers());
 
     cout << endl;
 	returnToMenu();
 }
 
-void Commands::addUser() const {
+void Commands::addUser() {
     int command;
     auto askForCommand = [&command]() {
-        cout << "1. Р”РѕР±Р°РІРёС‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ" << endl;
-        cout << "2. Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ РјРµРЅСЋ" << endl;
+        cout << "1. Добавить пользователя" << endl;
+        cout << "2. Вернуться в меню" << endl;
         do {
             cin >> command;
         } while (!(command >= 1 && command <= 2));
@@ -45,48 +60,49 @@ void Commands::addUser() const {
 
     do {
         system("cls");
-        cout << "Р”РѕР±Р°РІР»РµРЅРёРµ РЅРѕРІРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ" << endl;
+        cout << "Добавление нового пользователя" << endl;
 
         string login;
         string password;
         string passwordCheck;
         string role;
 
-        cout << setw(27) << "РРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ: ";
-        cin >> login;
+        cout << "Имя пользователя: " << endl;
+        ws(cin);
+        getline(cin, login);
         SetStdinEcho(false);
-        cout << setw(27) << "РџР°СЂРѕР»СЊ: ";
-        cin >> password;
-        cout << setw(27) << "РџСЂРѕРІРµСЂРєР° РїР°СЂРѕР»СЏ: ";
-        cin >> passwordCheck;
+        cout << "Пароль: " << endl;
+        ws(cin);
+        getline(cin, password);
+        cout << "Проверка пароля: " << endl;
+        ws(cin);
+        getline(cin, passwordCheck);
         SetStdinEcho();
-        cout << setw(27) << "Р РѕР»СЊ (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ user): ";
-        cin >> role;
+        cout << "Роль: " << endl;
+        ws(cin);
+        getline(cin, role);
         cout << endl;
 
         if (password != passwordCheck) {
-            cout << "РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ СЃРѕР·РґР°РЅ: РїР°СЂРѕР»СЊ Рё РїСЂРѕРІРµСЂРєР° РїР°СЂРѕР»СЏ РЅРµ СЃРѕРІРїР°РґР°СЋС‚";
+            cout << "Пользователь не создан: пароль и проверка пароля не совпадают";
             askForCommand();
             continue;
         }
         try {
-            if (role.empty())
-                users.add(login, password);
-            else
-                users.add(login, password, role);
+             users.add(login, password, role);
         } catch (string &errorMessage) {
-            cout << "РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ СЃРѕР·РґР°РЅ: " << errorMessage << endl;
+            cout << "Пользователь не создан: " << errorMessage << endl;
         }
 
         askForCommand();
     } while (command != 2);
 }
 
-void Commands::editUser() const {
+void Commands::editUser() {
     int command;
     auto askForCommand = [&command]() {
-        cout << "1. Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ" << endl;
-        cout << "2. Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ РјРµРЅСЋ" << endl;
+        cout << "1. Редактировать пользователя" << endl;
+        cout << "2. Вернуться в меню" << endl;
         do {
             cin >> command;
         } while (!(command >= 1 && command <= 2));
@@ -94,11 +110,12 @@ void Commands::editUser() const {
 
     do {
         system("cls");
-        cout << "Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ" << endl;
+        cout << "Редактирование пользователя" << endl;
 
         string login;
-        cout << "РРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ: ";
-        cin >> login;
+        cout << "Имя пользователя: ";
+        ws(cin);
+        getline(cin, login);
         try {
             users.get(login);
         } catch (string &errorMessage) {
@@ -109,9 +126,9 @@ void Commands::editUser() const {
         User &editedUser = users.get(login);
 
         int action;
-        cout << "1. Р—Р°РґР°С‚СЊ РЅРѕРІС‹Р№ РїР°СЂРѕР»СЊ" << endl;
-        cout << "2. РР·РјРµРЅРёС‚СЊ СЂРѕР»СЊ" << endl;
-        cout << "3. Р—Р°РєРѕРЅС‡РёС‚СЊ СЂР°Р±РѕС‚Сѓ СЃ СЌС‚РёРј РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј" << endl;
+        cout << "1. Задать новый пароль" << endl;
+        cout << "2. Изменить роль" << endl;
+        cout << "3. Закончить работу с этим пользователем" << endl;
         do {
             cin >> action;
         } while (!(action >= 1 && action <= 3));
@@ -120,38 +137,42 @@ void Commands::editUser() const {
 
         switch (action) {
         case 1: {
-            cout << "РР·РјРµРЅРµРЅРёРµ РїР°СЂРѕР»СЏ";
+            cout << "Изменение пароля" << endl;;
 
             string newPassword;
             string newPasswordCheck;
 
             SetStdinEcho(false);
-            cout << setw(17) << "РџР°СЂРѕР»СЊ: ";
-            cin >> newPassword;
-            cout << setw(17) << "РџСЂРѕРІРµСЂРєР° РїР°СЂРѕР»СЏ: ";
-            cin >> newPasswordCheck;
+            cout << "Пароль: " << endl;
+            ws(cin);
+            getline(cin, newPassword);
+            cout << "Проверка пароля: " << endl;
+            ws(cin);
+            getline(cin, newPasswordCheck);
             SetStdinEcho();
 
             if (newPassword != newPasswordCheck) {
-                cout << "РџР°СЂРѕР»СЊ РЅРµ РёР·РјРµРЅРµРЅ: РЅРѕРІС‹Р№ РїР°СЂРѕР»СЊ Рё РµРіРѕ РїСЂРѕРІРµСЂРєР° РЅРµ СЃРѕРІРїР°РґР°СЋС‚" << endl;
+                cout << "Пароль не изменен: новый пароль и его проверка не совпадают" << endl;
                 askForCommand();
                 continue;
             }
 
             editedUser.setPassword(newPassword);
-            cout << "РџР°СЂРѕР»СЊ СѓСЃРїРµС€РЅРѕ РёР·РјРµРЅРµРЅ" << endl;
+            cout << "Пароль успешно изменен" << endl;
             break;
         }
         case 2: {
-            cout << "РР·РјРµРЅРµРЅРёРµ СЂРѕР»Рё";
+            cout << "Изменение роли" << endl;
 
             string newRole;
-			cout << setw(14) << "РўРµРєСѓС‰Р°СЏ СЂРѕР»СЊ: " << editedUser.getRole() << endl;
-            cout << setw(14) << "РќРѕРІР°СЏ СЂРѕР»СЊ: ";
-            cin >> newRole;
+            cout << "Текущая роль: " << endl;
+            cout << editedUser.getRole() << endl;
+            cout << "Новая роль: " << endl;
+            ws(cin);
+            getline(cin, newRole);
 
             editedUser.setRole(newRole);
-            cout << "Р РѕР»СЊ СѓСЃРїРµС€РЅРѕ РёР·РјРµРЅРµРЅР°" << endl;
+            cout << "Роль успешно изменена" << endl;
             break;
         }
         }
@@ -160,11 +181,11 @@ void Commands::editUser() const {
     } while (command != 2);
 }
 
-void Commands::removeUser() const {
+void Commands::removeUser() {
     int command;
     auto askForCommand = [&command]() {
-        cout << "1. РЈРґР°Р»РёС‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ" << endl;
-        cout << "2. Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ РјРµРЅСЋ" << endl;
+        cout << "1. Удалить пользователя" << endl;
+        cout << "2. Вернуться в меню" << endl;
         do {
             cin >> command;
         } while (!(command >= 1 && command <= 2));
@@ -172,11 +193,12 @@ void Commands::removeUser() const {
 
     do {
         system("cls");
-        cout << "РЈРґР°Р»РµРЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ" << endl;
+        cout << "Удаление пользователя" << endl;
 
         string login;
-        cout << "РРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ: ";
-        cin >> login;
+        cout << "Имя пользователя: ";
+        ws(cin);
+        getline(cin, login);
         try {
             users.get(login);
             users.remove(login);
@@ -186,29 +208,31 @@ void Commands::removeUser() const {
             continue;
         }
 
-        cout << "РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅ" << endl;
+        cout << "Пользователь успешно удален" << endl;
 
         askForCommand();
     } while (command != 2);
 }
 
-void Commands::loadSubscribers() const {
+
+void Commands::loadSubscribers() {
 	int command;
 	auto askForCommand = [&command]() {
-		cout << "1. Р—Р°РіСЂСѓР·РёС‚СЊ С„Р°Р№Р»" << endl;
-		cout << "2. Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ РјРµРЅСЋ" << endl;
+		cout << "1. Загрузить файл" << endl;
+		cout << "2. Вернуться в меню" << endl;
 		do {
 			cin >> command;
-		} while (command != 1);
+		} while (!(command >= 1 && command <= 2));
 	};
 
 	do {
 		system("cls");
-		cout << "Р—Р°РіСЂСѓР·РєР° С„Р°Р№Р»Р° СЃ Р°Р±РѕРЅРµРЅС‚Р°РјРё" << endl;
+		cout << "Загрузка файла с абонентами" << endl;
 
 		string path;
-		cout << "РРјСЏ С„Р°Р№Р»Р°: ";
-		cin >> path;
+		cout << "Имя файла: ";
+        ws(cin);
+        getline(cin, path);
 
 		try {
 			subscribers.loadFromFile(path);
@@ -218,34 +242,36 @@ void Commands::loadSubscribers() const {
 			continue;
 		}
 
-		cout << "Р¤Р°Р№Р» СѓСЃРїРµС€РЅРѕ Р·Р°РіСЂСѓР¶РµРЅ" << endl;
+		cout << "Файл успешно загружен" << endl;
 
 		askForCommand();
-	} while (command != 1);
+	} while (command != 2);
 }
 
-void Commands::saveSubscribers() const {
+void Commands::saveSubscribers() {
 	system("cls");
-	cout << "РЎРѕС…СЂР°РЅРµРЅРёРµ С„Р°Р№Р»Р° СЃ Р°Р±РѕРЅРµРЅС‚Р°РјРё" << endl;
+	cout << "Сохранение файла с абонентами" << endl;
 
 	string path;
-	cout << "РРјСЏ С„Р°Р№Р»Р°: ";
-	cin >> path;
+	cout << "Имя файла: ";
+    ws(cin);
+    getline(cin, path);
 		
 	subscribers.saveToFile(path);
-	cout << "Р¤Р°Р№Р» СѓСЃРїРµС€РЅРѕ СЃРѕС…СЂР°РЅРµРЅ" << endl;
+	cout << "Файл успешно сохранен" << endl;
 
 	returnToMenu();
 }
 
-void Commands::printSubscribers() const {
+
+void Commands::printSubscribers() {
 	int command;
-	auto askForCommand = [&command]() {
-		cout << "1. РћС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ Р¤РРћ" << endl;
-		cout << "2. РћС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ РЅРѕРјРµСЂСѓ С‚РµР»РµС„РѕРЅР°" << endl;
-		cout << "3. РћС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ РіРѕРґСѓ РїРѕРґРєР»СЋС‡РµРЅРёСЏ" << endl;
-		cout << "4. РћС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ С‚Р°СЂРёС„РЅРѕРјСѓ РїР»Р°РЅСѓ" << endl;
-		cout << "5. Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ РјРµРЅСЋ" << endl;
+	auto askForCommand = [&command] {
+		cout << "1. Отсортировать по ФИО" << endl;
+		cout << "2. Отсортировать по номеру телефона" << endl;
+		cout << "3. Отсортировать по году подключения" << endl;
+		cout << "4. Отсортировать по тарифному плану" << endl;
+		cout << "5. Вернуться в меню" << endl;
 		do {
 			cin >> command;
 		} while (!(command >= 1 && command <= 5));
@@ -256,38 +282,39 @@ void Commands::printSubscribers() const {
 	auto compareByPlan   = [](const vector<string> &a, const vector<string> &b) { return a[3] < b[3]; };
 
 	system("cls");
-	cout << "РЎРїРёСЃРѕРє РІСЃРµС… Р°Р±РѕРЅРµРЅС‚РѕРІ:" << endl;
+    cout << "Список всех абонентов:" << endl;
 
 	auto subscribersList = subscribers.listSubscribers();
 	if (subscribersList.size() == 0) {
-		returnToMenu("РђР±РѕРЅРµРЅС‚С‹ РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚");
+		returnToMenu("Абоненты отсутствуют");
 		return;
 	}
 
 	auto columnWidths = calculateColumnWidths(subscribersList);
 
 	do {
-		cout << endl;
 		askForCommand();
+        system("cls");
 
+        auto sortedSubscribersList = subscribersList;
 		switch (command) {
 		case 1:	break;
-		case 2: stable_sort(subscribersList.begin(), subscribersList.end(), compareByNumber); break;
-		case 3: stable_sort(subscribersList.begin(), subscribersList.end(), compareByYear);   break;
-		case 4: stable_sort(subscribersList.begin(), subscribersList.end(), compareByPlan);   break;
+		case 2: stable_sort(sortedSubscribersList.begin(), sortedSubscribersList.end(), compareByNumber); break;
+		case 3: stable_sort(sortedSubscribersList.begin(), sortedSubscribersList.end(), compareByYear);   break;
+		case 4: stable_sort(sortedSubscribersList.begin(), sortedSubscribersList.end(), compareByPlan);   break;
 		case 5: continue; break;
 		}
 
-		printVectorOfVectors(subscribersList, columnWidths);
-		cout << endl;
+        printVectorOfVectors(sortedSubscribersList, columnWidths);
+        cout << endl;
 	} while (command != 5);
 }
 
-void Commands::addSubscriber() const {
+void Commands::addSubscriber() {
 	int command;
-	auto askForCommand = [&command]() {
-		cout << "1. Р”РѕР±Р°РІРёС‚СЊ Р°Р±РѕРЅРµРЅС‚Р°" << endl;
-		cout << "2. Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ РјРµРЅСЋ" << endl;
+	auto askForCommand = [&command] {
+		cout << "1. Добавить абонента" << endl;
+		cout << "2. Вернуться в меню" << endl;
 		do {
 			cin >> command;
 		} while (!(command >= 1 && command <= 2));
@@ -295,40 +322,40 @@ void Commands::addSubscriber() const {
 
 	do {
 		system("cls");
-		cout << "Р”РѕР±Р°РІР»РµРЅРёРµ РЅРѕРІРѕРіРѕ Р°Р±РѕРЅРµРЅС‚Р°" << endl;
+		cout << "Добавление нового абонента" << endl;
 
 		string fio;
 		long long number;
 		long long year;
 		string plan;
 
-		cout << setw(16) << "Р¤РРћ: ";
-		cin >> fio;
-		SetStdinEcho(false);
-		cout << setw(16) << "РќРѕРјРµСЂ С‚РµР»РµС„РѕРЅР°: ";
+		cout << "ФИО: " << endl;
+        ws(cin);
+        getline(cin, fio);
+		cout << "Номер телефона: " << endl;
 		cin >> number;
-		cout << setw(16) << "Р“РѕРґ: ";
+		cout << "Год: " << endl;
 		cin >> year;
-		SetStdinEcho();
-		cout << setw(16) << "РўР°СЂРёС„РЅС‹Р№ РїР»Р°РЅ: ";
-		cin >> plan;
+        cout << "Тарифный план: " << endl;
+        ws(cin);
+        getline(cin, plan);
 		cout << endl;
 
 		try {
 			subscribers.add(fio, number, year, plan);
 		} catch (string &errorMessage) {
-			cout << "РђР±РѕРЅРµРЅС‚ РЅРµ РґРѕР±Р°РІР»РµРЅ: " << errorMessage << endl;
+			cout << "Абонент не добавлен: " << errorMessage << endl;
 		}
 
 		askForCommand();
 	} while (command != 2);
 }
 
-void Commands::editSubscriber() const {
+void Commands::editSubscriber() {
 	int command;
 	auto askForCommand = [&command]() {
-		cout << "1. Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ Р°Р±РѕРЅРµРЅС‚Р°" << endl;
-		cout << "2. Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ РјРµРЅСЋ" << endl;
+		cout << "1. Редактировать абонента" << endl;
+		cout << "2. Вернуться в меню" << endl;
 		do {
 			cin >> command;
 		} while (!(command >= 1 && command <= 2));
@@ -336,11 +363,12 @@ void Commands::editSubscriber() const {
 
 	do {
 		system("cls");
-		cout << "Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ Р°Р±РѕРЅРµРЅС‚Р°" << endl;
+		cout << "Редактирование абонента" << endl;
 
 		string fio;
-		cout << "Р¤РРћ: ";
-		cin >> fio;
+		cout << "ФИО: ";
+        ws(cin);
+        getline(cin, fio);
 		try {
 			subscribers.get(fio);
 		} catch (string &errorMessage) {
@@ -351,9 +379,9 @@ void Commands::editSubscriber() const {
 		Subscriber &editedSubscriber = subscribers.get(fio);
 
 		int action;
-		cout << "1. РР·РјРµРЅРёС‚СЊ РЅРѕРјРµСЂ" << endl;
-		cout << "2. РР·РјРµРЅРёС‚СЊ С‚Р°СЂРёС„РЅС‹Р№ РїР»Р°РЅ" << endl;
-		cout << "3. Р—Р°РєРѕРЅС‡РёС‚СЊ СЂР°Р±РѕС‚Сѓ СЃ СЌС‚РёРј РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј" << endl;
+		cout << "1. Изменить номер" << endl;
+		cout << "2. Изменить тарифный план" << endl;
+		cout << "3. Закончить работу с этим пользователем" << endl;
 		do {
 			cin >> action;
 		} while (!(action >= 1 && action <= 3));
@@ -362,28 +390,33 @@ void Commands::editSubscriber() const {
 
 		switch (action) {
 		case 1: {
-			cout << "РР·РјРµРЅРµРЅРёРµ РЅРѕРјРµСЂР°";
+            cout << "Изменение номера" << endl;;
 
 			long long newNumber;
 
-			cout << setw(15) << "РўРµРєСѓС‰РёР№ РЅРѕРјРµСЂ: " << editedSubscriber.getNumber() << endl;
-			cout << setw(15) << "РќРѕРІС‹Р№ РЅРѕРјРµСЂ: ";
+            cout << "Текущий номер: " << endl;
+            cout << editedSubscriber.getNumber() << endl;
+			cout << "Новый номер: " << endl;
 			cin >> newNumber;
 
 			editedSubscriber.setNumber(newNumber);
-			cout << "РќРѕРјРµСЂ СѓСЃРїРµС€РЅРѕ РёР·РјРµРЅРµРЅ" << endl;
+			cout << "Номер успешно изменен" << endl;
+            cout << endl;
 			break;
 		}
 		case 2: {
-			cout << "РР·РјРµРЅРµРЅРёРµ С‚Р°СЂРёС„РЅРѕРіРѕ РїР»Р°РЅР°";
+			cout << "Изменение тарифного плана" << endl;;
 
 			string newPlan;
-			cout << setw(23) << "РўРµРєСѓС‰РёР№ С‚Р°СЂРёС„РЅС‹Р№ РїР»Р°РЅ: " << editedSubscriber.getPlan() << endl;
-			cout << setw(23) << "РќРѕРІС‹Р№ С‚Р°СЂРёС„РЅС‹Р№ РїР»Р°РЅ";
-			cin >> newPlan;
+            cout << "Текущий тарифный план: " << endl;
+            cout << editedSubscriber.getPlan() << endl;
+			cout << "Новый тарифный план: " << endl;
+            ws(cin);
+            getline(cin, newPlan);
 
 			editedSubscriber.setPlan(newPlan);
-			cout << "РўР°СЂРёС„РЅС‹Р№ РїР»Р°РЅ СѓСЃРїРµС€РЅРѕ РёР·РјРµРЅРµРЅ" << endl;
+			cout << "Тарифный план успешно изменен" << endl;
+            cout << endl;
 			break;
 		}
 		}
@@ -392,11 +425,11 @@ void Commands::editSubscriber() const {
 	} while (command != 2);
 }
 
-void Commands::removeSubscriber() const {
+void Commands::removeSubscriber() {
 	int command;
 	auto askForCommand = [&command]() {
-		cout << "1. РЈРґР°Р»РёС‚СЊ Р°Р±РѕРЅРµРЅС‚Р°" << endl;
-		cout << "2. Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ РјРµРЅСЋ" << endl;
+		cout << "1. Удалить абонента" << endl;
+		cout << "2. Вернуться в меню" << endl;
 		do {
 			cin >> command;
 		} while (!(command >= 1 && command <= 2));
@@ -404,11 +437,12 @@ void Commands::removeSubscriber() const {
 
 	do {
 		system("cls");
-		cout << "РЈРґР°Р»РµРЅРёРµ Р°Р±РѕРЅРµРЅС‚Р°" << endl;
+		cout << "Удаление абонента" << endl;
 
 		string fio;
-		cout << "Р¤РРћ Р°Р±РѕРЅРµРЅС‚Р°: ";
-		cin >> fio;
+		cout << "ФИО абонента: ";
+        ws(cin);
+        getline(cin, fio);
 		try {
 			subscribers.get(fio);
 			subscribers.remove(fio);
@@ -418,17 +452,17 @@ void Commands::removeSubscriber() const {
 			continue;
 		}
 
-		cout << "РђР±РѕРЅРµРЅС‚ СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅ" << endl;
+		cout << "Абонент успешно удален" << endl;
 
 		askForCommand();
 	} while (command != 2);
 }
 
-void Commands::findSubscriber() const {
+void Commands::findSubscriber() {
 	int command;
 	auto askForCommand = [&command]() {
-		cout << "1. РќР°Р№С‚Рё Р°Р±РѕРЅРµРЅС‚Р°" << endl;
-		cout << "2. Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ РјРµРЅСЋ" << endl;
+		cout << "1. Найти абонента" << endl;
+		cout << "2. Вернуться в меню" << endl;
 		do {
 			cin >> command;
 		} while (!(command >= 1 && command <= 2));
@@ -436,31 +470,32 @@ void Commands::findSubscriber() const {
 
 	do {
 		system("cls");
-		cout << "РџРѕРёСЃРє Р°Р±РѕРЅРµРЅС‚Р°" << endl;
+		cout << "Поиск абонента" << endl;
 
 		string searchString;
-		cout << "РќР°Р№С‚Рё: ";
-		cin >> searchString;
+		cout << "Найти: ";
+        ws(cin);
+        getline(cin, searchString);
 
 		vector<vector<string>> searchResults = subscribers.find(searchString);
 		if (searchResults.size() == 0) {
-			cout << "РќРёС‡РµРіРѕ РЅРµ РЅР°Р№РґРµРЅРѕ" << endl;
+			cout << "Ничего не найдено" << endl;
 			askForCommand();
 			continue;
 		}
 
-		cout << searchResults.size() << " СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ" << endl;
+		cout << searchResults.size() << " результатов" << endl;
 		printVectorOfVectors(searchResults);
 
 		askForCommand();
 	} while (command != 2);
 }
 
-void Commands::doIndividual() const {
+void Commands::doIndividual() {
 	int command;
 	auto askForCommand = [&command]() {
-		cout << "1. РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕРµ Р·Р°РґР°РЅРёРµ" << endl;
-		cout << "2. Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ РјРµРЅСЋ" << endl;
+		cout << "1. Индивидуальное задание" << endl;
+		cout << "2. Вернуться в меню" << endl;
 		do {
 			cin >> command;
 		} while (!(command >= 1 && command <= 2));
@@ -468,15 +503,15 @@ void Commands::doIndividual() const {
 
 	do {
 		system("cls");
-		cout << "РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕРµ Р·Р°РґР°РЅРёРµ: РїРѕРґСЃС‡РёС‚Р°С‚СЊ Рё РІС‹РІРµСЃС‚Рё РЅР° СЌРєСЂР°РЅ Р°Р±РѕРЅРµРЅС‚РѕРІ,\n РїРѕРґРєР»СЋС‡РµРЅРЅС‹С… СЃ РѕРїСЂРµРґРµР»РµРЅРЅРѕРіРѕ РіРѕРґР°" << endl;
+		cout << "Индивидуальное задание: подсчитать и вывести на экран абонентов,\n подключенных с определенного года" << endl;
 
 		long long year;
-		cout << "Р’РІРµРґРёС‚Рµ РіРѕРґ: ";
+		cout << "Введите год: ";
 		cin >> year;
 
 		auto subscribersList = subscribers.listSubscribers();
 		if (subscribersList.size() == 0) {
-			returnToMenu("РђР±РѕРЅРµРЅС‚С‹ РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚");
+			returnToMenu("Абоненты отсутствуют");
 			return;
 		}
 
@@ -488,8 +523,9 @@ void Commands::doIndividual() const {
 									  vector<string>(subscribersList[0].size(), to_string(year)),
 									  compareByYear);
 		if (firstMatch == subscribersList.end()) {
-			returnToMenu("РўР°РєРёРµ Р°Р±РѕРЅРµРЅС‚С‹ РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚");
-			return;
+            cout << "Такие абоненты отсутствуют" << endl;
+            askForCommand();
+            continue;
 		}
 
 		printVectorOfVectors(vector<vector<string>>(firstMatch, subscribersList.end()));
@@ -499,14 +535,14 @@ void Commands::doIndividual() const {
 }
 
 
-void Commands::returnToMenu(const string &message) const {
+void Commands::returnToMenu(const string &message) {
 	if (!message.empty())
 		cout << message << endl;
-	cout << "РќР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ РґР»СЏ РІРѕР·РІСЂР°С‚Р° РІ РјРµРЅСЋ" << endl;
+	cout << "Нажмите любую клавишу для возврата в меню" << endl;
 	_getch();
 }
 
-vector<size_t> Commands::calculateColumnWidths(const vector<vector<string>> &data) const {
+vector<size_t> Commands::calculateColumnWidths(const vector<vector<string>> &data) {
 	vector<size_t> columnWidths(data[0].size());
 	for (size_t columnIndex = 0; columnIndex < columnWidths.size(); ++columnIndex)
 		for (auto line : data)
@@ -515,12 +551,14 @@ vector<size_t> Commands::calculateColumnWidths(const vector<vector<string>> &dat
 	return columnWidths;
 }
 
-void Commands::printVectorOfVectors(const vector<vector<string>> &data) const {
+void Commands::printVectorOfVectors(const vector<vector<string>> &data) {
 	printVectorOfVectors(data, calculateColumnWidths(data));
 }
 
-void Commands::printVectorOfVectors(const vector<vector<string>> &data, const vector<size_t> &columnWidths) const {
-	for (auto entry : data)
-		for (size_t column = 0; column < entry.size(); ++column)
-			cout << left << setw(columnWidths[column]) << entry[column] << " ";
+void Commands::printVectorOfVectors(const vector<vector<string>> &data, const vector<size_t> &columnWidths) {
+    for (auto entry : data) {
+        for (size_t column = 0; column < entry.size(); ++column)
+            cout << left << setw(columnWidths[column]) << entry[column] << " ";
+        cout << endl;
+    }
 }

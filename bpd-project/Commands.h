@@ -1,32 +1,39 @@
 #pragma once
 
+#include <map>
 #include <string>
 #include <vector>
 
 using namespace std;
 
-static class Commands
+class Commands
 {
 public:
-    void printUsers() const;
-    void addUser() const;
-    void editUser() const;
-    void removeUser() const;
-
-	void loadSubscribers() const;
-	void saveSubscribers() const;
-
-	void printSubscribers() const;
-	void addSubscriber() const;
-	void editSubscriber() const;
-	void removeSubscriber() const;
-	void findSubscriber() const;
-	void doIndividual() const;
+    static void invoke(const string &role, const long long &command);
 
 private:
-	void		   returnToMenu		    (const string &message = "") const;
-	vector<size_t> calculateColumnWidths(const vector<vector<string>> &data) const;
-	void		   printVectorOfVectors (const vector<vector<string>> &data) const;
-	void		   printVectorOfVectors (const vector<vector<string>> &data, const vector<size_t> &columnWidths) const;
-} commands;
+    static map<string, vector<void (*)()>> commands_;
 
+    static void printUsers();
+    static void addUser();
+    static void editUser();
+    static void removeUser();
+
+    static void loadSubscribers();
+    static void saveSubscribers();
+
+    static void printSubscribers();
+    static void addSubscriber();
+    static void editSubscriber();
+    static void removeSubscriber();
+    static void findSubscriber();
+    static void doIndividual();
+
+	static void		      returnToMenu		   (const string &message = "");
+	static vector<size_t> calculateColumnWidths(const vector<vector<string>> &data);
+	static void		      printVectorOfVectors (const vector<vector<string>> &data);
+	static void		      printVectorOfVectors (const vector<vector<string>> &data,
+                                                const vector<size_t> &columnWidths);
+};
+
+extern Commands commands;
