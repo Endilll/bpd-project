@@ -1,24 +1,29 @@
 #pragma once
 
-#include <array>
 #include <map>
+#include <string>
 #include <vector>
 
 #include "Subscriber.h"
 
 using namespace std;
 
-static class Subscribers {
+class Subscribers {
 public:
-    void add(const string    &fullName,
+    static void saveToFile  (const string &path);
+    static void loadFromFile(const string &path);
+
+    static void add(const string    &fullName,
              const long long &number,
              const long long &year,
              const string    &plan);
-    void remove(const string &fullName);
-    Subscriber& getSubscriber(const string &fullName);
-    vector<array<string, 4>> listSubscribers();
+    static void remove(const string &fullName);
+    static vector<vector<string>> find(const string &searchString);
+    static Subscriber & get(const string &fullName);
+    static vector<vector<string>> listSubscribers();
 
 private:
-    map<string, Subscriber> subscribers_;
-} subscribers;
+    static map<string, Subscriber> subscribers_;
+};
 
+extern Subscribers subscribers;
