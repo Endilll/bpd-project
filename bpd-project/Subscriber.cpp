@@ -3,8 +3,6 @@
 
 #include "stdafx.h"
 
-#include <string>
-
 #include "Subscriber.h"
 
 using namespace std;
@@ -18,12 +16,25 @@ Subscriber::Subscriber(const string    &fullName,
 			           year_    (year),
 			           plan_    (plan) {}
 
-string   Subscriber::getFullName() const		   { return fullName_;     }
+Subscriber::Subscriber(const vector<string> &fields) :
+                       fullName_      (fields[0]),
+                       number_  (stoll(fields[1])),
+                       year_    (stoll(fields[2])),
+                       plan_          (fields[3]) {}
 
-long long Subscriber::getNumber() const			   { return number_;   }
-void	  Subscriber::setNumber(long long &number) { number_ = number; }
+vector<string> Subscriber::getAsVector() const {
+    return {           fullName_,
+             to_string(number_),
+             to_string(year_),
+                       plan_ };
+}
 
-long long Subscriber::getYear() const { return year_; }
+string    Subscriber::getFullName() const		         { return fullName_; }
 
-string    Subscriber::getPlan() const	   { return plan_; }
-void      Subscriber::setPlan(string &plan) { plan_ = plan; }
+long long Subscriber::getNumber()   const		         { return number_;   }
+void	  Subscriber::setNumber(const long long &number) { number_ = number; }
+
+long long Subscriber::getYear() const             { return year_; }
+
+string    Subscriber::getPlan() const	          { return plan_; }
+void      Subscriber::setPlan(const string &plan) { plan_ = plan; }
