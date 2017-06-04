@@ -1,3 +1,4 @@
 #pragma once
 
-void SetStdinEcho(bool enable = true);
+#include <string>
+void SetStdinEcho(const bool &enable = true);
