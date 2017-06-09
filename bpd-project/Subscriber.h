@@ -11,7 +11,6 @@ public:
 			   const long long &number,
 			   const long long &year,
 			   const string    &plan);
-    Subscriber(const vector<string> &fields);
 
 	string    getFullName() const;
 
@@ -29,6 +28,8 @@ private:
 	      long long number_;
 	const long long year_;
 	      string    plan_;
+
+    Subscriber(const vector<string> &fields);
 
     vector<string> getAsVector_() const;
 };
