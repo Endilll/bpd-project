@@ -107,5 +107,8 @@ int main()
         }
         commands.invoke(currentUser.getRole(), command);
     }
+
+    users.saveToFile("users.yaml");
+
 	return 0;
 }
