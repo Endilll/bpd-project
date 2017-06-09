@@ -25,12 +25,12 @@ map<string, vector<void(*)()>> Commands::commands_{
                                            &Commands::addSubscriber,
                                            &Commands::editSubscriber,
                                            &Commands::removeSubscriber,
-                                           &Commands::findSubscriber,
+                                           &Commands::findSubscribers,
                                            &Commands::doIndividual }),
 
     make_pair("user", vector<void(*)()>  { &Commands::loadSubscribers,
                                            &Commands::printSubscribers,
-                                           &Commands::findSubscriber,
+                                           &Commands::findSubscribers,
                                            &Commands::doIndividual })
 };
 
@@ -458,7 +458,7 @@ void Commands::removeSubscriber() {
 	} while (command != 2);
 }
 
-void Commands::findSubscriber() {
+void Commands::findSubscribers() {
 	long long command;
 	auto askForCommand = [&command]() {
 		cout << "1. Найти абонента" << endl;

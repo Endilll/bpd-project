@@ -26,7 +26,7 @@ private:
     static void addSubscriber();
     static void editSubscriber();
     static void removeSubscriber();
-    static void findSubscriber();
+    static void findSubscribers();
     static void doIndividual();
 
 	static void		      returnToMenu		   (const string &message = "");
