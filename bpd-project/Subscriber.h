@@ -23,11 +23,12 @@ public:
 	string    getPlan() const;
 	void      setPlan(const string &plan);
 
-    vector<string> getAsVector() const;
 
 private:
 	const string    fullName_;
 	      long long number_;
 	const long long year_;
 	      string    plan_;
+
+    vector<string> getAsVector_() const;
 };

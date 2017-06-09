@@ -49,14 +49,14 @@ vector<vector<string>> Subscribers::find(const string &searchString) {
 			Subscriber &subscriber = pair.second;
 			if (searchNumber == subscriber.getNumber() ||
 				searchNumber == subscriber.getYear())
-				searchResults.push_back(subscriber.getAsVector());
+				searchResults.push_back(subscriber.getAsVector_());
 		}
 	} else
 		for (auto pair : subscribers_) {
 			Subscriber &subscriber = pair.second;
 			if (searchString == subscriber.getFullName() ||
 				searchString == subscriber.getPlan())
-				searchResults.push_back(subscriber.getAsVector());
+				searchResults.push_back(subscriber.getAsVector_());
 		}
 
 	return searchResults;
@@ -77,7 +77,7 @@ void Subscribers::saveToFile(const string &path) {
     Emitter emitter;
     emitter << BeginSeq;
     for (auto pair : subscribers_) {
-        emitter << Flow << pair.second.getAsVector();
+        emitter << Flow << pair.second.getAsVector_();
     }
     emitter << EndSeq;
 

@@ -60,7 +60,7 @@ User::User(const vector<string> &fields) :
            passwordSalt_(fields[2]),
            role_        (fields[3]) {}
 
-vector<string> User::getAsVector() {
+vector<string> User::getAsVector_() {
     return { login_,
              password_,
              passwordSalt_,

@@ -53,7 +53,7 @@ void Users::saveToFile(const string &path) {
     Emitter emitter;
     emitter << BeginSeq;
     for (auto pair : users_) {
-        emitter << Flow << pair.second.getAsVector();
+        emitter << Flow << pair.second.getAsVector_();
     }
     emitter << EndSeq;
 

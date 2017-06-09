@@ -22,7 +22,7 @@ Subscriber::Subscriber(const vector<string> &fields) :
                        year_    (stoll(fields[2])),
                        plan_          (fields[3]) {}
 
-vector<string> Subscriber::getAsVector() const {
+vector<string> Subscriber::getAsVector_() const {
     return {           fullName_,
              to_string(number_),
              to_string(year_),

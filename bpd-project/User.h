@@ -30,5 +30,5 @@ private:
     static string generateSalt_();
 
     User(const vector<string> &fields);
-    vector<string> getAsVector();
+    vector<string> getAsVector_();
 };
