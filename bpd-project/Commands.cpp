@@ -49,7 +49,7 @@ void Commands::printUsers() {
 }
 
 void Commands::addUser() {
-    int command;
+    long long command;
     auto askForCommand = [&command]() {
         cout << "1. Добавить пользователя" << endl;
         cout << "2. Вернуться в меню" << endl;
@@ -99,7 +99,7 @@ void Commands::addUser() {
 }
 
 void Commands::editUser() {
-    int command;
+    long long command;
     auto askForCommand = [&command]() {
         cout << "1. Редактировать пользователя" << endl;
         cout << "2. Вернуться в меню" << endl;
@@ -125,7 +125,7 @@ void Commands::editUser() {
         }
         User &editedUser = users.get(login);
 
-        int action;
+        long long action;
         cout << "1. Задать новый пароль" << endl;
         cout << "2. Изменить роль" << endl;
         cout << "3. Закончить работу с этим пользователем" << endl;
@@ -182,7 +182,7 @@ void Commands::editUser() {
 }
 
 void Commands::removeUser() {
-    int command;
+    long long command;
     auto askForCommand = [&command]() {
         cout << "1. Удалить пользователя" << endl;
         cout << "2. Вернуться в меню" << endl;
@@ -216,7 +216,7 @@ void Commands::removeUser() {
 
 
 void Commands::loadSubscribers() {
-	int command;
+	long long command;
 	auto askForCommand = [&command]() {
 		cout << "1. Загрузить файл" << endl;
 		cout << "2. Вернуться в меню" << endl;
@@ -265,7 +265,7 @@ void Commands::saveSubscribers() {
 
 
 void Commands::printSubscribers() {
-	int command;
+	long long command;
 	auto askForCommand = [&command] {
 		cout << "1. Отсортировать по ФИО" << endl;
 		cout << "2. Отсортировать по номеру телефона" << endl;
@@ -311,7 +311,7 @@ void Commands::printSubscribers() {
 }
 
 void Commands::addSubscriber() {
-	int command;
+	long long command;
 	auto askForCommand = [&command] {
 		cout << "1. Добавить абонента" << endl;
 		cout << "2. Вернуться в меню" << endl;
@@ -352,7 +352,7 @@ void Commands::addSubscriber() {
 }
 
 void Commands::editSubscriber() {
-	int command;
+	long long command;
 	auto askForCommand = [&command]() {
 		cout << "1. Редактировать абонента" << endl;
 		cout << "2. Вернуться в меню" << endl;
@@ -378,7 +378,7 @@ void Commands::editSubscriber() {
 		}
 		Subscriber &editedSubscriber = subscribers.get(fio);
 
-		int action;
+		long long action;
 		cout << "1. Изменить номер" << endl;
 		cout << "2. Изменить тарифный план" << endl;
 		cout << "3. Закончить работу с этим пользователем" << endl;
@@ -426,7 +426,7 @@ void Commands::editSubscriber() {
 }
 
 void Commands::removeSubscriber() {
-	int command;
+	long long command;
 	auto askForCommand = [&command]() {
 		cout << "1. Удалить абонента" << endl;
 		cout << "2. Вернуться в меню" << endl;
@@ -459,7 +459,7 @@ void Commands::removeSubscriber() {
 }
 
 void Commands::findSubscriber() {
-	int command;
+	long long command;
 	auto askForCommand = [&command]() {
 		cout << "1. Найти абонента" << endl;
 		cout << "2. Вернуться в меню" << endl;
@@ -492,7 +492,7 @@ void Commands::findSubscriber() {
 }
 
 void Commands::doIndividual() {
-	int command;
+	long long command;
 	auto askForCommand = [&command]() {
 		cout << "1. Индивидуальное задание" << endl;
 		cout << "2. Вернуться в меню" << endl;
