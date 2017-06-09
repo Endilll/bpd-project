@@ -22,6 +22,7 @@ public:
 	string    getPlan() const;
 	void      setPlan(const string &plan);
 
+    friend class Subscribers;
 
 private:
 	const string    fullName_;
